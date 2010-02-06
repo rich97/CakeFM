@@ -1,5 +1,6 @@
 <?php
-class FilemanagerAppModel extends AppModel {
+class FilemanagerAppModel extends AppModel
+{
     
 }
 ?>

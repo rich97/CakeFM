@@ -1,5 +1,8 @@
 <?php
-class FilemanagerAppController extends AppController {
-    
+class FilemanagerAppController extends AppController
+{
+
+    public $protect = true;
+
 }
 ?>
