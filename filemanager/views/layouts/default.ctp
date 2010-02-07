@@ -21,19 +21,19 @@
 			echo $html->tag('h1', '');
 			echo $html->tag('div', '', array('id' => 'uploadresponse'));
 			?>
-			<input id="mode" name="mode" type="hidden" value="add" />
+			<!--<input id="mode" name="mode" type="hidden" value="add" />
 			<input id="currentpath" name="currentpath" type="hidden" />
 			<input id="newfile" name="newfile" type="file" />
 			<button id="upload" name="upload" type="submit" value="Upload">Upload</button>
 			<button id="newfolder" name="newfolder" type="button" value="New Folder">New Folder</button>
-			<button id="grid" class="ON" type="button" title="Switch to grid view.">&nbsp;</button><button id="list" type="button" title="Switch to list view.">&nbsp;</button>
+			<button id="grid" class="ON" type="button" title="Switch to grid view.">&nbsp;</button><button id="list" type="button" title="Switch to list view.">&nbsp;</button>-->
 		<?php echo $form->end(); ?>
 
 		<div id="splitter">
 			<div id="filetree"></div>
 			<div id="filemanager">
-				<div id="fileinfo"><h1>Select an item from the left.</h1></div>
-				<div id="filelist"><h1>Select an item from the left.</h1></div>
+				<div id="filelist"><h1>Folder is empty</h1></div>
+				<div id="fileinfo"><h1>No file selected</h1></div>
 			</div>
 		</div>
 

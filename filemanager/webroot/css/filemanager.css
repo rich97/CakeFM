@@ -1,6 +1,4 @@
 * {
-	font-family: Lucida Sans Unicode, Lucida Grande, sans-serif;
-	color: #333;
 	box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	-webkit-box-sizing: border-box;
@@ -10,6 +8,7 @@
 body {
 	padding: 10px;
 	background-color: #E2EAF3;
+	font-family: Lucida Sans Unicode, Lucida Grande, sans-serif;
 }
 
 #uploader {
@@ -73,9 +72,40 @@ body {
 	max-width: 80%;
 }
 
-#fileinfo > h1 {
+#filelist {
+	overflow:auto;
+}
+
+#filelist thead {
+	background:#e5e5e5;
+}
+
+#filelist th {
+	padding:6px 10px;
+	text-align:left;
+	font-weight:normal;
+}
+
+#filelist th.iconpad {
+	padding-left:35px;
+}
+
+#filelist > h1, #fileinfo > h1 {
 	font-size: 16px;
 	margin: 100px auto;
+	text-align:center;
+}
+
+#filelist table {
+	width:100%;
+}
+
+#filelist table td {
+	padding: 5px 10px;
+}
+
+#filelist table tr.odd {
+	background:#fafafa;
 }
 
 #preview dl {

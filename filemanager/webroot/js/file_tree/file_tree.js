@@ -27,15 +27,15 @@
 //
 // TERMS OF USE
 // 
-// jQuery File Tree is licensed under a Creative Commons License and is copyrighted (C)2008 by Cory S.N. LaViska.
-// For details, visit http://creativecommons.org/licenses/by/3.0/us/
+// This plugin is dual-licensed under the GNU General Public License and the MIT License and
+// is copyright 2008 A Beautiful Site, LLC. 
 //
 if(jQuery) (function($){
 	
 	$.extend($.fn, {
 		fileTree: function(o, h) {
 			// Defaults
-			if( !o ) o = {};
+			if( !o ) var o = {};
 			if( o.root == undefined ) o.root = '/';
 			if( o.script == undefined ) o.script = 'jqueryFileTree.php';
 			if( o.folderEvent == undefined ) o.folderEvent = 'click';
@@ -45,8 +45,6 @@ if(jQuery) (function($){
 			if( o.collapseEasing == undefined ) o.collapseEasing = null;
 			if( o.multiFolder == undefined ) o.multiFolder = true;
 			if( o.loadMessage == undefined ) o.loadMessage = 'Loading...';
-			if( o.folderCallback == undefined ) o.folderCallback = null;
-			if( o.after == undefined ) o.after = null;
 			
 			$(this).each( function() {
 				
@@ -58,7 +56,6 @@ if(jQuery) (function($){
 						$(c).removeClass('wait').append(data);
 						if( o.root == t ) $(c).find('UL:hidden').show(); else $(c).find('UL:hidden').slideDown({ duration: o.expandSpeed, easing: o.expandEasing });
 						bindTree(c);
-						o.after(data);
 					});
 				}
 				
@@ -74,15 +71,14 @@ if(jQuery) (function($){
 								$(this).parent().find('UL').remove(); // cleanup
 								showTree( $(this).parent(), escape($(this).attr('rel').match( /.*\// )) );
 								$(this).parent().removeClass('collapsed').addClass('expanded');
-								
-								o.folderCallback($(this).attr('rel'));
 							} else {
 								// Collapse
 								$(this).parent().find('UL').slideUp({ duration: o.collapseSpeed, easing: o.collapseEasing });
 								$(this).parent().removeClass('expanded').addClass('collapsed');
 							}
+							h(null, $(this).attr('rel'));
 						} else {
-							h($(this).attr('rel'));
+							h($(this).attr('rel'), null);
 						}
 						return false;
 					});

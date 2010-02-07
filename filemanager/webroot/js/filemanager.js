@@ -4,9 +4,10 @@
 
 // Sets paths to connectors based on language selection.
 var treeConnector = '/filemanager/request/ajax/method:listTree';
-var fileConnector = 'connectors/' + lang + '/filemanager.' + lang;
+var listConnector = '/filemanager/request/ajax/method:listFiles';
+//var fileConnector = 'connectors/' + lang + '/filemanager.' + lang;
 
-// Options for alert, prompt, and confirm dialogues.
+/*// Options for alert, prompt, and confirm dialogues.
 $.SetImpromptuDefaults({
 	overlayspeed: 'fast',
 	show: 'fadeIn',
@@ -118,7 +119,7 @@ $.urlParam = function(name){
 // button in detail views or choosing the "Select"
 // contextual menu option in list views. 
 // NOTE: closes the window when finished.
-var selectItem = function(data){
+/*var selectItem = function(data){
 	if(window.opener){
 		if($.urlParam('CKEditor')){
 			// use CKEditor 3.0 integration method
@@ -244,7 +245,7 @@ var deleteItem = function(data){
 
 // Adds a new node as the first item beneath the specified
 // parent node. Called after a successful file upload.
-var addNode = function(path, name){
+/*var addNode = function(path, name){
 	var ext = name.substr(name.lastIndexOf('.') + 1);
 	var thisNode = $('#filetree').find('a[rel="' + path + '"]');
 	var parentNode = thisNode.parent();
@@ -304,7 +305,7 @@ var addFolder = function(parent, name){
 
 // Decides whether to retrieve file or folder info based on
 // the path provided.
-var getDetailView = function(path){
+/*var getDetailView = function(path){
 	if(path.lastIndexOf('/') == path.length - 1){
 		getFolderInfo(path);
 		$('#filetree').find('a[rel="' + path + '"]').click();
@@ -392,7 +393,7 @@ var getFileInfo = function(file){
 // creates a list view. Binds contextual menu options.
 // TODO: consider stylesheet switching to switch between grid
 // and list views with sorting options.
-var getFolderInfo = function(path){
+/*var getFolderInfo = function(path){
 	// Update location for status, upload, & new folder functions.
 	setUploader(path);
 
@@ -502,10 +503,26 @@ var getFolderInfo = function(path){
 			});
 		}
 	});
+}*/
+
+// Forces columns to fill the layout vertically.
+// Called on initial page load and on resize.
+var setDimensions = function(){
+	var newH = $(window).height() - 50;	
+	$('#splitter, #filetree, #fileinfo, #fileinfo, .vsplitbar').height(newH);
 }
 
-
-
+var bindFileList = function(folder) {
+	$('#filelist').load(listConnector, {dir: folder});
+	
+	$('#filelist').bind(
+		'click',
+		function (e) {
+			e.preventDefault();
+			alert('called');
+		}
+	);
+}
 
 
 /*---------------------------------------------------------
@@ -513,6 +530,28 @@ var getFolderInfo = function(path){
 ---------------------------------------------------------*/
 
 $(function(){
+	
+	$('#uploader h1').text('Current Folder: ' + fileRoot);
+	
+	// Creates file tree.
+	$('#filetree').fileTree({
+		root: fileRoot,
+		script: treeConnector,
+		multiFolder: false,
+		after: function(data){
+			$('#filetree').find('li a').contextMenu(
+				{ menu: 'itemOptions' }, 
+				function(action, el, pos){
+					var path = $(el).attr('rel');
+					setMenus(action, path);
+				}
+			);
+		}
+	}, function(file, folder){
+		bindFileList(folder);
+		$('#uploader h1').text('Current Folder: ' + folder);
+	});
+
 	// Adjust layout.
 	setDimensions();
 	$(window).resize(setDimensions);
@@ -525,14 +564,14 @@ $(function(){
 		initB: 300
 	});
 
-	// cosmetic tweak for buttons
+	/*// cosmetic tweak for buttons
 	$('button').wrapInner('<span></span>');
 
 	// Set initial view state.
 	$('#fileinfo').data('view', 'grid');
 
 	// Set buttons to switch between grid and list views.
-	$('#grid').click(function(){
+	/*$('#grid').click(function(){
 		$(this).addClass('ON');
 		$('#list').removeClass('ON');
 		$('#fileinfo').data('view', 'grid');
@@ -549,7 +588,7 @@ $(function(){
 	// Provide initial values for upload form, status, etc.
 	setUploader(fileRoot);
 
-	$('#uploader').attr('action', fileConnector);
+	/*$('#uploader').attr('action', fileConnector);
 
 	$('#uploader').ajaxForm({
 		target: '#uploadresponse',
@@ -562,24 +601,6 @@ $(function(){
 				$.prompt(data['Error']);
 			}
 		}
-	});
+	});*/
 
-	// Creates file tree.
-    $('#filetree').fileTree({
-		root: fileRoot,
-		script: treeConnector,
-		multiFolder: false,
-		folderCallback: function(path){ getFolderInfo(path); },
-		after: function(data){
-			$('#filetree').find('li a').contextMenu(
-				{ menu: 'itemOptions' }, 
-				function(action, el, pos){
-					var path = $(el).attr('rel');
-					setMenus(action, path);
-				}
-			);
-		}
-	}, function(file){
-		getFileInfo(file);
-	});
 });

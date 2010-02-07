@@ -1,5 +1,5 @@
 <?php
 
-$config['root'] = APP . WEBROOT_DIR;
+$config['root'] = APP . 'plugins/filemanager';
 
 ?>

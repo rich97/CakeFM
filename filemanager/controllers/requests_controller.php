@@ -4,15 +4,17 @@ class RequestsController extends FilemanagerAppController
     
     public $uses = array();
     
-    public $autoRender = false;
-    
     public $layout = 'empty';
+    
+    public $autoRender = false;
     
     private $__rootDir = '';
     
     private $__saveToDb = false;
     
     private $__folderObject = null;
+
+    private $__fileObject = null;
     
     public function dispatch()
     {
@@ -28,37 +30,40 @@ class RequestsController extends FilemanagerAppController
         $this->__config();
         $this->data = $_POST;
         $this->$method();
+        $this->render($method);
     }
 
     public function listTree ()
     {
         $folder = $this->__folderObject;
+        $list_dir = $this->data['dir'];
+
+        $folder->cd($this->__rootDir . DS . $list_dir);
+        $files_inside = $folder->read(true, true);
+
+        $this->set(compact('list_dir'));
+        $this->set(compact('files_inside'));
+    }
+    
+    public function listFiles ()
+    {
+        $folder = $this->__folderObject;
+        $list_dir = $this->data['dir'];
+
         $folder->cd($this->__rootDir . DS . $this->data['dir']);
         $files_inside = $folder->read(true, true);
-        echo '<ul class="jqueryFileTree" style="display: none;">';
-        foreach ($files_inside as $type => $files) {
-            if ($type == 0) {
-                foreach ($files as $file) {
-                    echo
-                    '<li class="directory collapsed">' .
-                        '<a href="#" rel="' .
-                            htmlentities($this->data['dir'] . $file . DS) .
-                        '">' .
-                            htmlentities($file) .
-                        '</a>' .
-                    '</li>';
-                }
-            }
-        }
-        echo '</ul>';
+
+        $this->set(compact('list_dir'));
+        $this->set(compact('files_inside'));
     }
     
     private function __config()
     {
         //Absolute path no trailing slash
         $this->__rootDir = Configure::read('Filemanager.root');
-        if (!$this->__folderObject) {
+        if (!$this->__folderObject || !$this->__fileObject) {
             uses('Folder');
+            uses('File');
             $this->__folderObject =& new Folder; 
         }
     }
