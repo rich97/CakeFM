@@ -3,7 +3,7 @@
 ---------------------------------------------------------*/
 
 // Sets paths to connectors based on language selection.
-var treeConnector = 'scripts/jquery.filetree/connectors/jqueryFileTree.' + lang;
+var treeConnector = '/filemanager/request/ajax/method:listTree';
 var fileConnector = 'connectors/' + lang + '/filemanager.' + lang;
 
 // Options for alert, prompt, and confirm dialogues.
