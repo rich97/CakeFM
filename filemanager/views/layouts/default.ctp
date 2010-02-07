@@ -31,7 +31,10 @@
 
 		<div id="splitter">
 			<div id="filetree"></div>
-			<div id="fileinfo"><h1>Select an item from the left.</h1></div>
+			<div id="filemanager">
+				<div id="fileinfo"><h1>Select an item from the left.</h1></div>
+				<div id="filelist"><h1>Select an item from the left.</h1></div>
+			</div>
 		</div>
 
 		<ul id="itemOptions" class="contextMenu">

@@ -17,7 +17,7 @@ $.SetImpromptuDefaults({
 // Called on initial page load and on resize.
 var setDimensions = function(){
 	var newH = $(window).height() - 50;	
-	$('#splitter, #filetree, #fileinfo, .vsplitbar').height(newH);
+	$('#splitter, #filetree, #fileinfo, #fileinfo, .vsplitbar').height(newH);
 }
 
 // Sets the folder status, upload, and new folder functions 
@@ -520,6 +520,9 @@ $(function(){
 	// Provides support for adjustible columns.
 	$('#splitter').splitter({
 		initA: 200
+	});
+	$('#splitter #filemanager').splitter({
+		initB: 300
 	});
 
 	// cosmetic tweak for buttons
