@@ -45,7 +45,7 @@
 		</ul>
 
 		<?php
-			echo $html->script($base . 'js/jquery-1.2.6-min');
+			echo $html->script($base . 'js/jquery-1.4-min');
 			echo $html->script($base . 'js/form/form');
 			echo $html->script($base . 'js/splitter/splitter');
 			echo $html->script($base . 'js/file_tree/file_tree');
@@ -53,7 +53,7 @@
 			echo $html->script($base . 'js/impromptu/impromptu');
 			echo $html->script($base . 'js/table_sorter/table_sorter');
 			echo $html->script($base . 'js/filemanager.config');
-			echo $html->script($base . 'js/filemanager');
+			echo $html->script($base . 'js/filemanager-rewrite');
 		?>
 	</body>
 </html>

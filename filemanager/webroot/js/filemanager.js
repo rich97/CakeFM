@@ -513,15 +513,15 @@ var setDimensions = function(){
 }
 
 var bindFileList = function(folder) {
-	$('#filelist').load(listConnector, {dir: folder});
-	
-	$('#filelist').bind(
-		'click',
-		function (e) {
-			e.preventDefault();
-			alert('called');
-		}
-	);
+    $('#filelist').load(listConnector, {dir: folder});
+
+    $('#filelist a').live(
+        'click',
+        function (e) {
+            e.preventDefault();
+            var connector = $(this).attr('href');
+        }
+    );
 }
 
 
@@ -530,39 +530,40 @@ var bindFileList = function(folder) {
 ---------------------------------------------------------*/
 
 $(function(){
-	
-	$('#uploader h1').text('Current Folder: ' + fileRoot);
-	
-	// Creates file tree.
-	$('#filetree').fileTree({
-		root: fileRoot,
-		script: treeConnector,
-		multiFolder: false,
-		after: function(data){
-			$('#filetree').find('li a').contextMenu(
-				{ menu: 'itemOptions' }, 
-				function(action, el, pos){
-					var path = $(el).attr('rel');
-					setMenus(action, path);
-				}
-			);
-		}
-	}, function(file, folder){
-		bindFileList(folder);
-		$('#uploader h1').text('Current Folder: ' + folder);
-	});
 
-	// Adjust layout.
-	setDimensions();
-	$(window).resize(setDimensions);
+    bindFileList(fileRoot);
+    $('#uploader h1').text('Current Folder: ' + fileRoot);
 
-	// Provides support for adjustible columns.
-	$('#splitter').splitter({
-		initA: 200
-	});
-	$('#splitter #filemanager').splitter({
-		initB: 300
-	});
+    // Creates file tree.
+    $('#filetree').fileTree({
+        root: fileRoot,
+        script: treeConnector,
+        multiFolder: false,
+        after: function(data){
+            $('#filetree').find('li a').contextMenu(
+                { menu: 'itemOptions' }, 
+                function(action, el, pos){
+                    var path = $(el).attr('rel');
+                    setMenus(action, path);
+                }
+            );
+        }
+    }, function(file, folder){
+        bindFileList(folder);
+        $('#uploader h1').text('Current Folder: ' + folder);
+    });
+
+    // Adjust layout.
+    setDimensions();
+    $(window).resize(setDimensions);
+
+    // Provides support for adjustible columns.
+    $('#splitter').splitter({
+        sizeLeft: 200
+    });
+    $('#splitter #filemanager').splitter({
+        sizeRight: 300
+    });
 
 	/*// cosmetic tweak for buttons
 	$('button').wrapInner('<span></span>');

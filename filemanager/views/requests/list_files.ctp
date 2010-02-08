@@ -26,9 +26,14 @@
                         $directory = $root . $list_dir;
                         echo $html->link(
                             $name,
-                            $directory . $name,
                             array(
-                                'class' => 'file ext_' . $info->ext()
+                                'controller' => 'requests',
+                                'action' => 'dispatch',
+                                'method' => 'getFileInfo'
+                            ),
+                            array(
+                                'class' => 'file ext_' . $info->ext(),
+                                'rel' => $directory . $name
                             )
                         );
                     ?>
