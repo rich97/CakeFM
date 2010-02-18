@@ -2,9 +2,9 @@
 <table id="list_files">
     <thead>
         <tr>
+            <th>&nbsp;</th>
             <th class="iconpad">File Name</th>
             <th>Size</th>
-            <th>Accessed</th>
             <th>Modified</th>
         </tr>
     </thead>
@@ -21,6 +21,9 @@
                 ?>
                 <tr class="<?php echo $class; ?>">
                     <td>
+                        <?php echo $html->link('', '#', array('class' => 'fmDraggable')) ?>
+                    </td>
+                    <td>
                     <?php
                         $name = $info->name() . '.' . $info->ext();
                         $directory = $root . $list_dir;
@@ -32,14 +35,13 @@
                                 'method' => 'getFileInfo'
                             ),
                             array(
-                                'class' => 'file ext_' . $info->ext(),
-                                'rel' => $directory . $name
+                                'class' => 'fmFilename file ext_' . $info->ext(),
+                                'rel' => $name
                             )
                         );
                     ?>
                     </td>
                     <td><?php echo $info->size(); ?></td>
-                    <td><?php echo $time->niceShort($info->lastAccess()); ?></td>
                     <td><?php echo $time->niceShort($info->lastChange()); ?></td>
                 </tr>
                 <?php
@@ -51,7 +53,7 @@
 </table>
 <?php } else {
 ?>
-<h1>Folder is empty</h1>
+<strong>Folder is empty</strong>
 <?php
 }
 ?>

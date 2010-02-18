@@ -6,7 +6,10 @@ class FilemanagerAppController extends AppController
     
     public $helpers = array('Time');
 
-    public $components = array('Filemanager.Config');
+    public $components = array(
+        'Filemanager.Config',
+        'Filemanager.FileSystemTree'
+    );
 
 }
 ?>

@@ -1,1 +1,5 @@
 * { zoom: 1; }
+#fileinfo .bigIcon img {
+    width:128px;
+}
+.clearfix {zoom: 1;} 

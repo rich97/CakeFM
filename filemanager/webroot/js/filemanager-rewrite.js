@@ -3,6 +3,8 @@ fmConfig = {
     basePath: '/',
     baseConnect: '/filemanager/request/ajax/method:',
     currentFolder: '',
+    bindTo: window,
+    modalContainer: null,
     connectors: [
         'listTree',
         'listFiles',
@@ -26,60 +28,74 @@ fm = {
         fmConfig.init();
         fm.setCurrentFolder(fmConfig.basePath);
         fm.setPannelDimentions();
-
+        
         fm.listTree();
         fm.listFiles();
+        fm.getFileInfo();
+        fm.bindDraggable();
+        fm.bindControls();
     },
     
     setCurrentFolder: function(setTo)
     {
         fmConfig.currentFolder = setTo;
-        $('#uploader h1').text('Current Folder: ' + fmConfig.currentFolder);
     },
 
     setPannelDimentions: function()
     {
-        $('#splitter, #filetree, #fileinfo, #fileinfo, .vsplitbar')
+        var manager = $('#manager');
+        var filelist = $('#filelist .border');
+        
+        var boundingBox = $(fmConfig.bindTo);
+        var toolbar = $('#tools').outerHeight();
+        
+        var border = parseInt(manager.css('marginBottom'));
+        var newHeight = boundingBox.height() - border - toolbar;
+        
+        manager.height(newHeight);
+        filelist
             .height(
-                $(window).height() - 50
+                newHeight - (
+                    parseInt(filelist.css('paddingTop')) +
+                    parseInt(filelist.css('paddingBottom'))
+                )
             );
-        $('#splitter')
-            .splitter({sizeLeft: 200});
-        $('#splitter #filemanager')
-            .splitter({sizeRight: 300});
     },
 
     listTree: function()
     {
-        $('#filetree').fileTree(
+        $('#filetree .pad').fileTree(
             {
                 root: fmConfig.currentFolder,
-                script: fmConfig.connectors['listTree'],
-                multiFolder: false
+                script: fmConfig.connectors['listTree']
             //callback
             }, function(file, folder)
             {
                 fm.setCurrentFolder(folder);
                 fm.listFiles();
+                fm.getFileInfo();
             }
         );
     },
 
     listFiles: function()
     {
-        $('#filelist').load(
+        $('#filelist .pad').load(
             fmConfig.connectors['listFiles'],
             {
                 dir: fmConfig.currentFolder
+            }, function ()
+            {
+                fm.bindDraggable();
             }
         );
 
-        fm.bindAction('#filelist a', 'getFileInfo')
+        fm.bindAction('#filelist a.fmFilename', 'getFileInfo');
     },
     
     getFileInfo: function (clicked) {
-        var file = (clicked) ? clicked.attr('rel') : '';
-        $('#fileinfo').load(
+        var file = ($(clicked)) ? $(clicked).attr('rel') : '';
+        $('#fileinfo .pad').load(
             fmConfig.connectors['getFileInfo'],
             {
                 dir: fmConfig.currentFolder,
@@ -87,10 +103,83 @@ fm = {
             }
         )
     },
+    
+    folderNew: {
+
+        test: function () {
+
+            var successBinded = false;
+
+            var options = { 
+                target:        '#cboxLoadedContent div',
+                url: fmConfig.baseConnect + 'folderNew',
+                resetForm: true,
+                success: function() {
+                    $.fn.colorbox.resize();
+                    successBinded = false;
+                }
+            };
+
+            $.fn.colorbox(
+                {
+                    href: fmConfig.baseConnect + 'folderNew',
+                    onComplete: function ()
+                    {
+                        $('#folderNew input').live(
+                            'focus',
+                            function()
+                            {
+                                if(successBinded === false) {
+                                    $(this).parents('form').eq(0).submit(function() {
+                                        $(this).ajaxSubmit(options);
+                                        return false; 
+                                    });
+                                    successBinded = true;
+                                }
+                            }
+                        );
+                    }
+                }
+            );
+
+        },
+
+        test2: function () {
+            alert('test2');
+        }
+
+    }, 
+    
+    uploader: function ()
+    {
+        
+    },
+    
+    downloader: function ()
+    {
+        
+    },
+    
+    imageEditor: function ()
+    {
+        
+    },
+    
+    bindControls: function ()
+    {
+        $('.fmNewFolder').click (
+            function (e) {
+                e.preventDefault();
+                fm.folderNew.test();
+            }
+        )   
+        fm.bindAction('.fmUpload', 'uploader');
+        fm.bindAction('.fmDownload', 'downloader');
+    },
 
     bindAction: function(element, bindTo)
     {
-        $(element).live(
+        $(element).live (
             'click',
             function (e) {
                 e.preventDefault();
@@ -98,6 +187,20 @@ fm = {
             }
         )
     },
+    
+    bindDraggable: function() {
+        $('#filelist a.fmDraggable').draggable(
+            {
+                helper: 'clone',
+                opacity: 0.8
+            }
+        );
+        $('#filetree a').droppable({
+            drop: function (hey, there) {
+                
+            }
+        });
+    }
     
 }
 
